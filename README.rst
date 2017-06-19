@@ -1,4 +1,4 @@
-datastore_to_gcs
+datastore-to-gcs
 ================
 
 Transfers data from Google Cloud Datastore to Google Cloud Storage.
