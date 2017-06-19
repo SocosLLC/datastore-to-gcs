@@ -22,7 +22,7 @@ LOG = logging.getLogger(__name__)
 
 
 class TestModel(datastore_to_gcs.BaseModel):
-    email = ndb.StringProperty(required=True, indexed=True)
+    email = ndb.StringProperty(required=True)
 
 
 class TestDatastoreToGCS(unittest.TestCase):

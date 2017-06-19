@@ -29,9 +29,9 @@ import sys
 _testbed = None
 
 # Reduce verbosity of GAE stubs
-LOG = logging.getLogger('').handlers[0]
-# LOG.setFormatter(logging.Formatter(unicode(logging.BASIC_FORMAT)))
-LOG.setLevel(logging.INFO)
+handlers = logging.getLogger('').handlers
+if handlers:
+    handlers[0].setLevel(logging.INFO)
 
 
 def gae_path():
