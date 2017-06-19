@@ -15,6 +15,7 @@ Usage
     >>>
     >>> class Foo(datastore_to_gcs.BaseModel):
     ...     email = ndb.StringProperty()
+    ...
     >>> f = Foo(email='a@b.com')
     >>> f.put()
     Key('Foo', 1)
@@ -32,11 +33,10 @@ Usage
     >>>
     >>> class Message(datastore_to_gcs.BaseModel):
     ...     text = ndb.StringProperty()
-    >>>
+    ...
     >>> m1 = Message(text='hello 1')
     >>> m1.put()
     Key('Message', 3)
-    >>>
     >>> datastore_to_gcs.dump_log(Message, 'bucket-name', 'messages/')
     '2017-06-19T18:05:07.json'
     >>> m2 = Message(text='hello 2')

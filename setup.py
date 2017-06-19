@@ -13,7 +13,7 @@ def read(*paths):
         return f.read()
 
 setup(
-    name='datastore_to_gcs',
+    name='datastore-to-gcs',
     packages=['datastore_to_gcs'],
     version='0.1',
     license='Apache License 2.0',
@@ -22,7 +22,7 @@ setup(
     author='Brandon Istenes',
     author_email='bistenes@socos.me',
     url='https://github.com/SocosLLC/datastore-to-gcs',
-    download_url='',
+    download_url='https://github.com/SocosLLC/datastore-to-gcs/archive/0.1.tar.gz',
     keywords=['gae', 'gcp', 'gcs', 'gcd', 'datastore', 'cloudstorage', 'transfer', 'dump'],
     classifiers=['Development Status :: 4 - Beta',
                  'License :: OSI Approved :: Apache Software License']
