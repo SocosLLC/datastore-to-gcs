@@ -38,24 +38,43 @@ class BaseModel(ndb.Model):
 
 # Interface ####################################################################
 
-def dump(model, gcs_bucket, gcs_object, since=None):
+def dump(model, gcs_bucket, gcs_path, since=None):
+    """ Creates a GCS file containing entites from a Datastore model
+
+    Entities are individually JSON encoded and written one per line
+
+    Parameters
+    ----------
+    model : ndb.Model
+    gcs_bucket : str
+        The name of the target GCS bucket
+    gcs_path : str
+        The name of the file to create
+    since : datetime
+        If provided, compared with model.last_modified to only get newly
+        modified entities
+    """
     if since:
+        print 'since: {}'.format(since)
         new_items_iter = model.query(model.last_modified > since).iter()
     else:
         new_items_iter = model.query().iter()
     new_items = [i.serializable() for i in new_items_iter]
+    print new_items
     if len(new_items) > 0:
         LOG.info("Uploading {n} items in {m} to {o}".format(n=len(new_items),
                                                             m=model._get_kind(),
-                                                            o=gcs_object))
-        cloud_storage.upload_data(new_items, gcs_bucket, gcs_object)
+                                                            o=gcs_path))
+        cloud_storage.upload_data(new_items, gcs_bucket, gcs_path)
     else:
         LOG.info("No items in {m} to transfer to {o}".format(m=model._get_kind(),
-                                                             o=gcs_object))
+                                                             o=gcs_path))
 
 
-def dump_log(model, gcs_bucket, gcs_log_directory, since=None):
+def dump_log(model, gcs_bucket, gcs_log_dir, dump_all=False):
     """ Creates a timestamped file in GCS containing new entities
+
+    Entities are individually JSON encoded and written one per line
 
     The timestamp of the previous log file is used to determine what date
     to pull entities from.
@@ -64,11 +83,20 @@ def dump_log(model, gcs_bucket, gcs_log_directory, since=None):
     ----------
     model : ndb.Model
     gcs_bucket : str
-    gcs_object : str
+        The name of the target GCS bucket
+    gcs_log_dir : str
+        The name of the directory in the bucket to dump files to
+    dump_all : bool
+        If True, all entities of model are dumped, not just new ones
     """
+    if dump_all:
+        last_log = None
+    else:
+        last_log = _last_log_datetime(gcs_bucket, gcs_log_dir)
+        print 'last log at {}'.format(last_log)
     log_name = cloud_storage.log_name(datetime.datetime.utcnow())
-    gcs_object = os.path.join(gcs_log_directory, log_name)
-    dump(model, gcs_bucket, gcs_object, since)
+    gcs_object = os.path.join(gcs_log_dir, log_name)
+    dump(model, gcs_bucket, gcs_object, since=last_log)
     return log_name
 
 
@@ -121,18 +149,6 @@ def update(model, gcs_bucket, gcs_object):
 
 
 # Private Methods ##############################################################
-
-def _transfer_log(gcs_bucket, model, target):
-    last_log = _last_log_datetime(gcs_bucket, target)
-    LOG.debug('Last {} log found: {}'.format(model.__name__, last_log))
-    res = dump_log(model,
-                   gcs_bucket,
-                   target,
-                   since=last_log)
-    if res:
-        log_name = res
-        LOG.debug('Saved {} log: {}'.format(model.__name__, log_name))
-
 
 def _last_log_datetime(gcs_bucket, gcs_dir):
     """ Finds the last date for files under /gcs_bucket/gcs_dir

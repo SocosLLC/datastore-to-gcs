@@ -50,7 +50,7 @@ Usage
     >>> gcs.download_object('bucket-name', 'messages/2017-06-19T18:05:07.json')
     [{u'text': u'hello 1', u'last_modified': u'2017-06-19T18:04:33.558426', u'id': 3}]
     >>> gcs.download_object('bucket-name', 'messages/2017-06-19T18:06:02.json')
-    [{u'text': u'hello 1', u'last_modified': u'2017-06-19T18:04:33.558426', u'id': 3}, {u'text': u'hello 2', u'last_modified': u'2017-06-19T18:05:35.084417', u'id': 4}, {u'text': u'hello 3', u'last_modified': u'2017-06-19T18:05:50.859952', u'id': 5}]
+    [{u'text': u'hello 2', u'last_modified': u'2017-06-19T18:05:35.084417', u'id': 4}, {u'text': u'hello 3', u'last_modified': u'2017-06-19T18:05:50.859952', u'id': 5}]
 
 
 

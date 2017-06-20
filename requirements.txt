@@ -1,6 +1,7 @@
 cumberbatch             # testing
 enum                    # util
 GoogleAppEngineCloudStorageClient   # cloud_storage
+mock                    # testing
 nose                    # testing
 python-dateutil         # cloud_storage
 toolz                   # util
