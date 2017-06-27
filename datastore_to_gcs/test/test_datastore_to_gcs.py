@@ -72,12 +72,12 @@ class TestDatastoreToGCS(unittest.TestCase):
         isoformat_regex = '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.json'
         self.assertRegexpMatches(log_files[0], isoformat_regex)
         log_files = gcs.list_objects(self.bucket, log_dir)
-        print log_files
+        pprint(log_files)
         log_items = gcs.download_object(self.bucket, log_dir + log_files[0])
-        print log_items
+        pprint(log_items)
         self.assertEqual(len(log_items), 2)
         # Add more items, expect no overlap
-        sleep(2)
+        sleep(1)
         self.fixtures[2].put()
         self.fixtures[3].put()
         datastore_to_gcs.dump_log(TestModel, self.bucket, log_dir)
@@ -87,7 +87,7 @@ class TestDatastoreToGCS(unittest.TestCase):
         log_items = list(itertools.chain(
             *[gcs.download_object(self.bucket, log_dir + lf)
             for lf in log_files]))
-        print log_items
+        pprint(log_items)
         self.assertEqual(len(log_items), 4)
 
 

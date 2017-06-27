@@ -56,11 +56,11 @@ def dump(model, gcs_bucket, gcs_path, since=None):
     """
     if since:
         print 'since: {}'.format(since)
-        new_items_iter = model.query(model.last_modified > since).iter()
+        new_items_iter = model.query(model.last_modified >= since).iter()
     else:
         new_items_iter = model.query().iter()
     new_items = [i.serializable() for i in new_items_iter]
-    print new_items
+    pprint(new_items)
     if len(new_items) > 0:
         LOG.info("Uploading {n} items in {m} to {o}".format(n=len(new_items),
                                                             m=model._get_kind(),
@@ -155,8 +155,14 @@ def _last_log_datetime(gcs_bucket, gcs_dir):
 
     Files must be named as ISO formatted datetime strings with the .json extension.
 
-    :return: datetime.datetime
-    :raises: ValueError if a file in the directory has a noncompliant name
+    Returns
+    -------
+    datetime.datetime
+
+    Raises
+    ------
+    ValueError
+        If a file in the directory has a noncompliant name
     """
     items_in_dir = cloud_storage.list_objects(gcs_bucket, gcs_dir)
     LOG.debug('Directory contains: {}'.format(items_in_dir))
@@ -167,7 +173,7 @@ def _last_log_datetime(gcs_bucket, gcs_dir):
     isostrings = [item[:-5] for item in items_in_dir]
     try:
         dts = [dateutil.parser.parse(item) for item in isostrings]
-        return max(dts)
+        return max(dts) + datetime.timedelta(seconds=1)
     except ValueError, e:
         LOG.error(u"Couldn't parse date in {}".format(pformat(isostrings)))
         raise e
