@@ -15,14 +15,14 @@ def read(*paths):
 setup(
     name='datastore-to-gcs',
     packages=['datastore_to_gcs'],
-    version='0.2',
+    version='0.3',
     license='Apache License 2.0',
     description='Transfer data from Google Cloud Datastore to Google Cloud Storage.',
     long_description=(read('README.rst')),
     author='Brandon Istenes',
     author_email='bistenes@socos.me',
     url='https://github.com/SocosLLC/datastore-to-gcs',
-    download_url='https://github.com/SocosLLC/datastore-to-gcs/archive/0.2.tar.gz',
+    download_url='https://github.com/SocosLLC/datastore-to-gcs/archive/0.3.tar.gz',
     keywords=['gae', 'gcp', 'gcs', 'gcd', 'datastore', 'cloudstorage', 'transfer', 'dump'],
     classifiers=['Development Status :: 4 - Beta',
                  'License :: OSI Approved :: Apache Software License']
