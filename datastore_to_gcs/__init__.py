@@ -13,7 +13,7 @@ import datetime
 import dateutil.parser
 import logging
 import os
-from pprint import pprint, pformat
+from pprint import pformat
 
 from google.appengine.ext import ndb
 
@@ -60,7 +60,6 @@ def dump(model, gcs_bucket, gcs_path, since=None):
     else:
         new_items_iter = model.query().iter()
     new_items = [i.serializable() for i in new_items_iter]
-    pprint(new_items)
     if len(new_items) > 0:
         LOG.info("Uploading {n} items in {m} to {o}".format(n=len(new_items),
                                                             m=model._get_kind(),
